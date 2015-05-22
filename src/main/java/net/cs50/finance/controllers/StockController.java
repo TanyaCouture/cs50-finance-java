@@ -31,6 +31,8 @@ public class StockController extends AbstractFinanceController {
     public String quote(String symbol, Model model) {
 
         // TODO - Implement quote lookup
+        // lookup symbol on yahoo
+        // get price
 
         // pass data to template
         model.addAttribute("title", "Quote");

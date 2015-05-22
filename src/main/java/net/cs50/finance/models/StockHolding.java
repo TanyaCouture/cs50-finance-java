@@ -1,10 +1,5 @@
 package net.cs50.finance.models;
 
-import net.cs50.finance.models.dao.StockHoldingDao;
-import net.cs50.finance.models.dao.StockTransactionDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

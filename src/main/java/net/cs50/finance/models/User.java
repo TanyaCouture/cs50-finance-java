@@ -1,7 +1,6 @@
 package net.cs50.finance.models;
 
 import net.cs50.finance.models.util.PasswordHash;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
