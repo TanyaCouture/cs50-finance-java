@@ -1,5 +1,7 @@
 package net.cs50.finance.controllers;
 
+import net.cs50.finance.models.Stock;
+import net.cs50.finance.models.StockLookupException;
 import net.cs50.finance.models.dao.StockHoldingDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static net.cs50.finance.models.Stock.lookupStock;
 
 /**
  * Created by Chris Bay on 5/17/15.
@@ -28,11 +32,15 @@ public class StockController extends AbstractFinanceController {
     }
 
     @RequestMapping(value = "/quote", method = RequestMethod.POST)
-    public String quote(String symbol, Model model) {
+    public String quote(String symbol, Model model) throws StockLookupException {
 
-        // TODO - Implement quote lookup
-        // lookup symbol on yahoo
-        // get price
+        // Implement quote lookup
+        Stock mystock = Stock.lookupStock(symbol);
+        Float stockPrice = mystock.getPrice();
+        model.addAttribute("stock_price", stockPrice);
+
+        String myName = mystock.getName();
+        model.addAttribute("stock_desc", myName);
 
         // pass data to template
         model.addAttribute("title", "Quote");
