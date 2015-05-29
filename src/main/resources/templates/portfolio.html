@@ -10,12 +10,35 @@
 
     <div id="middle">
 
-        <!-- TODO - Display portfolio -->
+        <!-- Display portfolio -->
         <p>Portfolio!</p>
+        <table class = "table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Number of shares owned</th>
+                    <th>Current price</th>
+                    <th>Total Value</th>
+                </tr>
+            </thead>
 
+            <!--data iteration here-->
+            <!--th : if = "${!portfolio.isEmpty()}">-->
+            <tr th:each="stockPart:${stockParts}">
+                <td th:text="${stockPart.value.symbol}"></td>
+                <td th:text="${stockPart.value.shareNum}"></td>
+                <td th:text="${stockPart.value.price}"></td>
+                <td th:text="${stockPart.value.totalValue}"></td>
+            </tr>
+            <tr>
+                <td colspan="4">CASH</td>
+                <td th:text="${cash}"></td>
+            </tr>
+        </table>
     </div>
 
     <div th:replace="template :: footer"></div>
 </div>
 </body>
 </html>
+<!---->
