@@ -1,5 +1,8 @@
 package net.cs50.finance.models;
 
+import net.cs50.finance.models.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -91,7 +94,6 @@ public class StockHolding extends AbstractEntity {
         }
 
         setSharesOwned(sharesOwned + numberOfShares);
-        // TODO - update user cash on buy
 
         StockTransaction transaction = new StockTransaction(this, numberOfShares, StockTransaction.TransactionType.BUY);
         this.transactions.add(transaction);
@@ -111,7 +113,6 @@ public class StockHolding extends AbstractEntity {
         }
 
         setSharesOwned(sharesOwned - numberOfShares);
-        // TODO - update user cash on sale
 
         StockTransaction transaction = new StockTransaction(this, numberOfShares, StockTransaction.TransactionType.SELL);
         this.transactions.add(transaction);
@@ -146,6 +147,24 @@ public class StockHolding extends AbstractEntity {
         holding = userPortfolio.get(symbol);
         holding.buyShares(numberOfShares);
 
+        // update user cash on buy
+        // subtract price from cash
+        Stock mystock = Stock.lookupStock(symbol);
+        Float stockPrice = mystock.getPrice();
+        
+        double totalPrice = stockPrice * numberOfShares;
+
+        // get amount of cash from user
+        Double cash = user.getCash();
+
+        // if purchase price is greater than amount of user cash, throw exception
+        if(totalPrice > cash){
+            throw new IllegalArgumentException("Purchase price is greater than the amount of cash available.");
+        }
+
+        Double newCash = cash - totalPrice;
+        user.setCash(newCash);
+
         return holding;
     }
 
@@ -177,4 +196,5 @@ public class StockHolding extends AbstractEntity {
 
         return holding;
     }
+
 }

@@ -1,7 +1,9 @@
 package net.cs50.finance.controllers;
 
 import net.cs50.finance.models.Stock;
+import net.cs50.finance.models.StockHolding;
 import net.cs50.finance.models.StockLookupException;
+import net.cs50.finance.models.User;
 import net.cs50.finance.models.dao.StockHoldingDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 
 import static net.cs50.finance.models.Stock.lookupStock;
+import static net.cs50.finance.models.StockHolding.buyShares;
 
 /**
  * Created by Chris Bay on 5/17/15.
@@ -61,7 +64,20 @@ public class StockController extends AbstractFinanceController {
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public String buy(String symbol, int numberOfShares, HttpServletRequest request, Model model) {
 
-        // TODO - Implement buy action
+        // implement buyshares(user, symbol, #shares)
+        User user = getUserFromSession(request);
+
+        StockHolding holding = null;
+        try {
+             holding = StockHolding.buyShares(user, symbol, numberOfShares);
+        } catch (StockLookupException e) {
+            e.printStackTrace();
+        }
+
+        stockHoldingDao.save(holding);
+        // save user with UserDao
+        userDao.save(user);
+
 
         model.addAttribute("title", "Buy");
         model.addAttribute("action", "/buy");
@@ -81,7 +97,19 @@ public class StockController extends AbstractFinanceController {
     @RequestMapping(value = "/sell", method = RequestMethod.POST)
     public String sell(String symbol, int numberOfShares, HttpServletRequest request, Model model) {
 
-        // TODO - Implement sell action
+        // Implement sell action
+        // implement sellShares(user, symbol, #shares)
+        User user = getUserFromSession(request);
+
+        StockHolding holding = null;
+        try {
+            holding = StockHolding.sellShares(user, symbol, numberOfShares);
+        } catch (StockLookupException e) {
+            e.printStackTrace();
+        }
+
+        stockHoldingDao.save(holding);
+        userDao.save(user);
 
         model.addAttribute("title", "Sell");
         model.addAttribute("action", "/sell");
