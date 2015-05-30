@@ -23,7 +23,6 @@
             </thead>
 
             <!--data iteration here-->
-            <!--th : if = "${!portfolio.isEmpty()}">-->
             <tr th:each="stockPart:${stockParts}">
                 <td th:text="${stockPart.value.nameString}"></td>
                 <td th:text="${stockPart.value.shareNum}"></td>
